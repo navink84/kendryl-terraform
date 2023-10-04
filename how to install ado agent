@@ -1,0 +1,3 @@
+ 2  mkdir myagent && cd myagent
+    4  wget https://vstsagentpackage.azureedge.net/agent/3.227.1/vsts-agent-linux-x64-3.227.1.tar.gz
+    5  tar zxvf vsts-agent-linux-x64-3.227.1.tar.gz

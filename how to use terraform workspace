@@ -4,8 +4,8 @@ terraform apply --auto-approve
   ####once the resource get provision we will create a new workspace
   terraform workspace list
 ###this will apply 
- 11 terraform apply
-  12 terraform workspace list
+ 
+
 ###lets create a new environment called as dev which will in trun create a dev folder and store the state file inside it. 
   14 terraform workspace new dev
   15 terraform workspace list

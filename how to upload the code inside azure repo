@@ -1,6 +1,7 @@
 ###we will delete my git refrence
 
   67 rm .git
+#open .gitignore remove provider.tf
   68 git config --global user.name "gopal"
   69 git config --global user.email "gopal1409@gmail.com"
   71 git init

@@ -8,3 +8,6 @@
   72 git add .
   73 git commit -m "terraform project"
   74 git log
+###generate the ssh key to upload the code in azure rpo
+ 77 ssh-keygen -t rsa
+  78 cat C:\Users\gopal/.ssh/id_rsa.pub

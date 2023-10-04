@@ -11,3 +11,5 @@
 ###generate the ssh key to upload the code in azure rpo
  77 ssh-keygen -t rsa
   78 cat C:\Users\gopal/.ssh/id_rsa.pub
+###lets create the service principal every project will have its service principal. 
+az ad sp create-for-rbac -n "TurbonomicSP" --role contributor --scope /subscriptions/def2cf32-c635-4684-ad00-5703dbddbe44

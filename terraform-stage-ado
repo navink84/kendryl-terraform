@@ -10,7 +10,8 @@ pool: default
  # vmImage: ubuntu-latest
 
 variables:
- 
+  provider: 'azurerm'
+  command: 'init'
   backendServiceArm: 'azureado'
   backendAzureRmResourceGroupName: 'terraform-storage'
   backendAzureRmStorageAccountName: 'terraformstategop'
@@ -35,7 +36,7 @@ stages:
               backendAzureRmResourceGroupName: 'terraform-storage'
               backendAzureRmStorageAccountName: 'terraformstategop'
               backendAzureRmContainerName: 'tfstatefiles'
-              backendAzureRmKey: 'project.tfstate'
+              backendAzureRmKey: '$(backendAzureRmKey)'
           - task: TerraformTaskV4@4
             displayName: validate
             inputs:
@@ -51,10 +52,7 @@ stages:
     condition: and (succeeded(),ne(variables['Build.Reason'],'PullRequest'))
     dependsOn: tfvalidate
     jobs:
-      - job: apply
-        
-        
-          
+      - job: plan
         steps:
            
           - task: TerraformInstaller@1
@@ -68,11 +66,46 @@ stages:
               backendServiceArm: 'azureado'
               backendAzureRmResourceGroupName: 'terraform-storage'
               backendAzureRmStorageAccountName: 'terraformstategop'
-              backendAzureRmContainerName: 'project.tfstate'
-              backendAzureRmKey: 'project.tfstate'
+              backendAzureRmContainerName: '$(backendAzureRmContainerName)'
+              backendAzureRmKey: '$(backendAzureRmKey)'
+              
+  
+      - job: approve
+        dependsOn: plan
+        condition: and (succeeded(),ne(variables['Build.Reason'],'PullRequest'))
+        #any job yyou want to run on azure devops always put pool: server 
+        pool: server
+        displayName: wait for approval
+        steps:
+          
+          - task: ManualValidation@0
+            timeoutInMinutes: 15
+            inputs:
+              instructions: 'please approve the job'
+              emailRecipients: 'gopal1409@gmail.com'
+              onTimeout: 'reject'
+          
+      - job: apply
+        dependsOn: plan
+        condition: and (succeeded(),ne(variables['Build.Reason'],'PullRequest'))
+        pool: default
+        displayName: applying the same
+        steps:
+          
+
           - task: TerraformTaskV4@4
+            displayName: reintilzied required for tfstate
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'azureado'
+              backendAzureRmResourceGroupName: 'terraform-storage'
+              backendAzureRmStorageAccountName: 'terraformstategop'
+              backendAzureRmContainerName: 'tfstatefiles'
+              backendAzureRmKey: '$(backendAzureRmKey)'
+          - task: TerraformTaskV4@4
+            displayName: creating the resource
             inputs:
               provider: 'azurerm'
               command: 'apply'
               environmentServiceNameAzureRM: 'azureado'
-      

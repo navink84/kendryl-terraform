@@ -32,7 +32,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              backendServiceArm: 'azureado'
+              backendServiceArm: '$(backendServiceArm)'
               backendAzureRmResourceGroupName: 'terraform-storage'
               backendAzureRmStorageAccountName: 'terraformstategop'
               backendAzureRmContainerName: 'tfstatefiles'
@@ -47,4 +47,4 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              environmentServiceNameAzureRM: 'azureado'
+              environmentServiceNameAzureRM: '$(backendServiceArm)'

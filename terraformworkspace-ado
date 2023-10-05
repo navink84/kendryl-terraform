@@ -1,1 +1,38 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
 
+trigger:
+- master
+
+pool: default
+ 
+variables:
+  - name: CommaSeparatedListofWorkspaces
+    value: "default, Dev, Test, Prod"
+stages:
+  - stage: validate
+    displayName: Validate 
+    jobs:
+    - job: init 
+      displayName: Terraform Validate
+      steps:
+        - task: TerraformInstaller@1
+          inputs:
+            terraformVersion: 'latest'
+        - task: TerraformTaskV4@4
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            backendServiceArm: 'terraform-workspace-con'
+            backendAzureRmResourceGroupName: 'terraform-storage'
+            backendAzureRmStorageAccountName: 'terraformstategop'
+            backendAzureRmContainerName: 'tfstatefiles'
+            backendAzureRmKey: 'workspace.tfstate'
+        - task: PowerShell@2
+          inputs:
+            filePath: 'listworkspace.ps1'
+            arguments: '-CommaSeparatedListofWorkspaces "$(CommaSeparatedListofWorkspaces)"'
+          displayName: creating workspace
+        

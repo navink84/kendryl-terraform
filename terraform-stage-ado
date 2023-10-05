@@ -91,7 +91,10 @@ stages:
         pool: default
         displayName: applying the same
         steps:
-          
+          - task: TerraformInstaller@1
+            displayName: tfinstall
+            inputs:
+              terraformVersion: 'latest'
 
           - task: TerraformTaskV4@4
             displayName: reintilzied required for tfstate

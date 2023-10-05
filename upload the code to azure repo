@@ -1,0 +1,11 @@
+git clone https://github.com/gopal1409/terraform-worspace-ado.git
+1 git clone https://github.com/gopal1409/terraform-worspace-ado.git
+   2 cd .\terraform-worspace-ado\
+   3 rm .git
+   4 git status
+   5 git init
+   6 git add .
+   7 git commit -m "terraform with workspace"
+###please below command click on the azure repo select ssh then copy and paster it in the terminal
+   8 git remote add origin git@ssh.dev.azure.com:v3/kendevops/terraform-workspace/terraform-workspace
+   9 git push -u origin --all

@@ -43,7 +43,9 @@ stages:
         displayName: destroying all the resources
         steps:
           
-
+          - task: TerraformInstaller@1
+            inputs:
+              terraformVersion: 'latest'
           - task: TerraformTaskV4@4
             displayName: reintilzied required for tfstate
             inputs:

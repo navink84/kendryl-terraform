@@ -10,8 +10,7 @@ pool: default
  # vmImage: ubuntu-latest
 
 variables:
-  provider: 'azurerm'
-  command: 'init'
+ 
   backendServiceArm: 'azureado'
   backendAzureRmResourceGroupName: 'terraform-storage'
   backendAzureRmStorageAccountName: 'terraformstategop'
@@ -32,7 +31,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              backendServiceArm: '$(backendServiceArm)'
+              backendServiceArm: 'azureado'
               backendAzureRmResourceGroupName: 'terraform-storage'
               backendAzureRmStorageAccountName: 'terraformstategop'
               backendAzureRmContainerName: 'tfstatefiles'
@@ -47,4 +46,33 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              environmentServiceNameAzureRM: '$(backendServiceArm)'
+              environmentServiceNameAzureRM: 'azureado'
+  - stage: tfdeploy
+    condition: and (succeeded(),ne(variables['Build.Reason'],'PullRequest'))
+    dependsOn: tfvalidate
+    jobs:
+      - job: apply
+        
+        
+          
+        steps:
+           
+          - task: TerraformInstaller@1
+            displayName: tfinstall
+            inputs:
+              terraformVersion: 'latest'
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              backendServiceArm: 'azureado'
+              backendAzureRmResourceGroupName: 'terraform-storage'
+              backendAzureRmStorageAccountName: 'terraformstategop'
+              backendAzureRmContainerName: 'project.tfstate'
+              backendAzureRmKey: 'project.tfstate'
+          - task: TerraformTaskV4@4
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              environmentServiceNameAzureRM: 'azureado'
+      

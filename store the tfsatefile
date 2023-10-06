@@ -11,5 +11,6 @@ echo "Your new filename: $FN"
 terraform state pull > $FN.tfstate
 rm terraform.tfstate
 rm terraform.tfstate.backup
-terraform init
+terraform init -reconfigure
+terraform init -migrate-state
 terraform apply --auto-approve

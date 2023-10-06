@@ -1,0 +1,15 @@
+#!/bin/bash
+# a.sh
+for (( i = 0; i < 1000; i++ ))
+do
+    fn=$(mktemp -u -t 'XXXXXX')
+    echo ${fn/\/tmp\//} > /dev/null
+done
+
+echo "Your new filename: $FN"
+
+terraform state pull > $FN.tfstate
+rm terraform.tfstate
+rm terraform.tfstate.backup
+terraform init
+terraform apply --auto-approve

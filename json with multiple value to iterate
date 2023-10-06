@@ -1,0 +1,51 @@
+
+virtual_machine_extensions = {
+  virtual_machine_extension_sql ={
+    name = "vmsqlext"   #Required
+    virtual_machine_variable_name = "windows_virtual_machine1"  
+    publisher = "Microsoft.SqlServer.Management"  
+    type = "SqlIaaSAgent" 
+    type_handler_version = "1.2" 
+    settings =<<SETTINGS
+    {
+      "AutoTelemetrySettings": {
+        "Region": "West Europe"
+      },
+      "AutoPatchingSettings": {
+        "PatchCategory": "WindowsMandatoryUpdates",
+        "Enable": true,
+        "DayOfWeek": "Sunday",
+        "MaintenanceWindowStartingHour": "2",
+        "MaintenanceWindowDuration": "60"
+      },
+      "KeyVaultCredentialSettings": {
+        "Enable": false,
+        "CredentialName": ""
+      },
+      "ServerConfigurationsManagementSettings": {
+        "SQLConnectivityUpdateSettings": {
+          "ConnectivityType": "Public",
+          "Port": "1433"
+        },
+        "SQLWorkloadTypeUpdateSettings": {
+          "SQLWorkloadType": "GENERAL"
+        },
+        "AdditionalFeaturesServerConfigurations": {
+          "IsRServicesEnabled": "true"
+        },
+        "protectedSettings": {}
+      }
+    }
+    SETTINGS
+    
+    virtual_machine_extension_tags = {
+      applicationName = "Windows VM Extension"
+      approver        = "IT Infrastructure"
+    }
+  }
+}
+
+###to apply this value
+
+  settings = each.value.settings
+
